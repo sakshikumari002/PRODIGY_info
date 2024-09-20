@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+        <div id="message"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+gn-items: center;
+    font-size: 30px;
+    cursor: pointer;
+}
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    border: 1px solid black;
+}
+
+.cell {
+    display: flex;
+    justify-content: center;
+    ali
+#message {
+    font-size: 20px;
+    margin-top: 20px;
+}
+const board = document.getElementById('board');
+const message = document.getElementById('message');
+let currentPlayer = 'X';
+let gameActive = true;
+
+const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+];
+
+function handleCellClick(e) {
+    const cellIndex = e.target.dataset.index;
+    const cell = board.querySelector(`[data-index="${cellIndex}"]`);
+
+    if (!gameActive || cell.textContent !== '') {
+        return;
+    }
+
+    cell.textContent = currentPlayer;
+    checkWinner();
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+}
+
+function checkWinner() {
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+        const cellA = board.querySelector(`[data-index="${a}"]`);
+        const cellB = board.querySelector(`[data-index="${b}"]`);
+        const cellC = board.querySelector(`[data-index="${c}"]`);
+
+        if (cellA.textContent && cellA.textContent === cellB.textContent && cellA.textContent === cellC.textContent) {
+            message.textContent = `${currentPlayer} wins!`;
+            gameActive = false;
+            return;
+        }
+    }
+
+    const allCellsFilled = Array.from(board.children).every(cell => cell.textContent !== '');
+    if (allCellsFilled) {
+        message.textContent = "It's a draw!";
+        gameActive = false;
+    }
+}
+
+board.addEventListener('click', handleCellClick);
