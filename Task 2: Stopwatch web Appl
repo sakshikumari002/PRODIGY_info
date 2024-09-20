@@ -1,0 +1,122 @@
+HTML
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stopwatch</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stopwatch">
+    <h1 id="time">00:00:00</h1>
+    <button id="start">Start</button>
+    <button id="pause">Pause</button>
+    <button id="reset">Reset</button>
+    <div id="laps"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+
+CSS Styling:
+
+CSS
+.stopwatch {
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+#laps {
+  margin-top: 20px;
+}
+
+.lap {
+  margin-bottom: 5px;
+}
+JavaScript
+const timeElement = document.getElementById('time');
+const startButton = document.getElementById('start');
+const pauseButton = document.getElementById('pause');
+const   
+ resetButton = document.getElementById('reset');   
+
+const lapsElement = document.getElementById('laps');
+
+let intervalId;
+let startTime;
+let elapsedTime = 0;
+
+function formatTime(time) {
+  const seconds = Math.floor(time / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);   
+
+
+  const secondsStr = seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60;
+  const minutesStr = minutes % 60 < 10 ? '0' + (minutes % 60) : minutes % 60;
+  const hoursStr = hours < 10 ? '0' + hours : hours;
+
+  return `${hoursStr}:${minutesStr}:${secondsStr}`;
+}
+
+function updateTimer() {
+  const currentTime = Date.now();
+  elapsedTime += currentTime - startTime;
+  startTime = currentTime;
+
+  timeElement.textContent = formatTime(elapsedTime);
+}
+
+startButton.addEventListener('click', () => {
+  if (!intervalId) {
+    startTime = Date.now();
+    intervalId = setInterval(updateTimer, 10);
+    startButton.disabled = true;
+    pauseButton.disabled = false;
+  }
+});
+
+pauseButton.addEventListener('click', () => {
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+    startButton.disabled = false;
+    pauseButton.disabled = true;
+  }
+});
+
+resetButton.addEventListener('click', () => {
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+  }
+
+  elapsedTime = 0;
+  timeElement.textContent = formatTime(elapsedTime);
+  lapsElement.innerHTML = '';
+  startButton.disabled = false;
+  pauseButton.disabled = true;
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    if (intervalId) {
+      const lapTime = formatTime(elapsedTime);
+      const lapElement = document.createElement('div');
+      lapElement.className = 'lap';
+      lapElement.textContent = lapTime;
+      lapsElement.appendChild(lapElement);
+    }
+  }
+});
