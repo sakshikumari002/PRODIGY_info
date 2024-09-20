@@ -1,1 +1,3 @@
 # PRODIGY_info
+To build a tic-tac-toe web application and stopwatch  you can use HTML, CSS, and JavaScript. By implementing functions to handle user clicks, track game state, and check for winning conditions, you can create an interactive and engaging tic-tac-toe game. In Stopwatch to check the right timimg of stop watch to check how to pause and restart  With these technologies and functionalities...
+Responsive Landing Page and Personal portfolio website to create website with the the help of HTML,CSS,JAVA these all are inculde in web development. to create differents project with the help of these language.. 
